@@ -8,7 +8,7 @@ from scipy import stats
 list = [3, 4, 5, 1, 5, 2, 1, 3, 1, 3]
 list.sort()
 
-f = "⎸{:<50}| {:010.2f} ⎸"
+f = "⎸{:<50}| {:010.4f} ⎸"
 [print("_", end="") for _ in range(64)]
 print()
 print(f.format("Minimum", np.min(list)))
