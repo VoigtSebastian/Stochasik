@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+import matplotlib.pyplot as plt
 from dataclasses import dataclass
 import math
 import numpy as np
@@ -24,6 +24,16 @@ def print_quantile(v, q):
     print(f.format(f"{int(v*100)}-Quantil", q))
 
 
+def modalwert(list):
+    counts = {}
+    for i in list:
+        if i in counts:
+            counts[i] += 1
+        else:
+            counts[i] = 1
+    return max(counts, key=counts.get)
+
+
 # -----------------------------------------------------------------------------
 # Output
 # -----------------------------------------------------------------------------
@@ -38,6 +48,7 @@ print(f.format("Arithmetisches Mittel / Mittel / Erwartungswert", np.mean(list))
 print(f.format("Varianz", np.var(list, ddof=1)))
 print(f.format("Standardabweichung", np.std(list, ddof=1)))
 print(f.format("Median", np.median(list)))
+print(f.format("Modalwert", modalwert(list)))
 
 print_separator(sep="-")
 
@@ -57,3 +68,7 @@ print_separator(sep="‾")
 # -----------------------------------------------------------------------------
 # Plotting
 # -----------------------------------------------------------------------------
+
+plt.hist(list, len(set(list)), edgecolor="black", linewidth=1.2)
+plt.title("Histogramm")
+plt.show()
