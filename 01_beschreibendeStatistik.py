@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
+
 import matplotlib.pyplot as plt
-from dataclasses import dataclass
 import math
 import numpy as np
-from scipy import stats
 
 # -----------------------------------------------------------------------------
 # Setup
