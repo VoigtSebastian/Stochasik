@@ -9,11 +9,13 @@ import tabulate
 # Setup
 # -----------------------------------------------------------------------------
 
-list = [25, 10, 30, 25, 35, 25]
+values = [25, 10, 30, 25, 35, 25]
 quantile = [0.75]
+counts = {}
+
 output = []
 
-list.sort()
+values.sort()
 
 
 def add_quantile(v, q):
@@ -21,7 +23,6 @@ def add_quantile(v, q):
 
 
 def modalwert(list):
-    counts = {}
     for i in list:
         if i in counts:
             counts[i] += 1
@@ -34,23 +35,23 @@ def modalwert(list):
 # Output
 # -----------------------------------------------------------------------------
 
-output.append(["Minimum", np.min(list)])
-output.append(["Maximum", np.max(list)])
-output.append(["Spannweite", np.max(list) - np.min(list)])
-output.append(["Arithmetisches Mittel / Erwartungswert", np.mean(list)])
-output.append(["Median", np.median(list)])
-output.append(["Varianz", np.var(list, ddof=1)])
-output.append(["Standardabweichung", np.std(list, ddof=1)])
-output.append(["Modalwert", modalwert(list)])
+output.append(["Minimum", np.min(values)])
+output.append(["Maximum", np.max(values)])
+output.append(["Spannweite", np.max(values) - np.min(values)])
+output.append(["Arithmetisches Mittel / Erwartungswert", np.mean(values)])
+output.append(["Median", np.median(values)])
+output.append(["Varianz", np.var(values, ddof=1)])
+output.append(["Standardabweichung", np.std(values, ddof=1)])
+output.append(["Modalwert", modalwert(values)])
 
 
 for quant in quantile:
-    quantil = len(list) * quant
+    quantil = len(values) * quant
     if quantil.is_integer():
-        q = np.quantile(list, quant, method="midpoint")
+        q = np.quantile(values, quant, method="midpoint")
         add_quantile(quant, q)
     else:
-        q = list[math.ceil(quant * len(list)) - 1]
+        q = values[math.ceil(quant * len(values)) - 1]
         add_quantile(quant, q)
 
 print(tabulate.tabulate(output, headers=["Name", "Wert"], tablefmt="fancy_grid"))
@@ -59,6 +60,5 @@ print(tabulate.tabulate(output, headers=["Name", "Wert"], tablefmt="fancy_grid")
 # Plotting
 # -----------------------------------------------------------------------------
 
-plt.hist(list, len(set(list)), edgecolor="black", linewidth=1.2)
-plt.title("Histogramm")
+plt.bar(list(counts.keys()), list(counts.values()), edgecolor="black", linewidth=1.2)
 plt.show()
