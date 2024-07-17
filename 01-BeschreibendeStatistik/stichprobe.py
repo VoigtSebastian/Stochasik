@@ -9,8 +9,8 @@ import tabulate
 # Setup
 # -----------------------------------------------------------------------------
 
-values = [25, 10, 30, 25, 35, 25]
-quantile = [0.75]
+values = [2, 4, 3, 1, 2, 4, 2, 2, 2, 3]
+quantile = [0.10, 0.25, 0.75]
 counts = {}
 
 output = []
@@ -19,7 +19,7 @@ values.sort()
 
 
 def add_quantile(v, q):
-    output.append([f"{int(v*100)}-Quantil", q])
+    output.append([f"{int(v*100)}-Quantil", q, f"x̃̃_{v}"])
 
 
 def modalwert(list):
@@ -35,14 +35,14 @@ def modalwert(list):
 # Output
 # -----------------------------------------------------------------------------
 
-output.append(["Minimum", np.min(values)])
-output.append(["Maximum", np.max(values)])
-output.append(["Spannweite", np.max(values) - np.min(values)])
-output.append(["Arithmetisches Mittel / Erwartungswert", np.mean(values)])
-output.append(["Median", np.median(values)])
-output.append(["Varianz", np.var(values, ddof=1)])
-output.append(["Standardabweichung", np.std(values, ddof=1)])
-output.append(["Modalwert", modalwert(values)])
+output.append(["Minimum", np.min(values), "min"])
+output.append(["Maximum", np.max(values), "max"])
+output.append(["Spannweite", np.max(values) - np.min(values), "IQR"])
+output.append(["Arithmetisches Mittel / Erwartungswert", np.mean(values), "̅̅x"])
+output.append(["Median", np.median(values), "x̃̃"])
+output.append(["Varianz", np.var(values, ddof=1), "s^2"])
+output.append(["Standardabweichung", np.std(values, ddof=1), "s"])
+output.append(["Modalwert", modalwert(values), "x_mod"])
 
 
 for quant in quantile:
@@ -54,7 +54,20 @@ for quant in quantile:
         q = values[math.ceil(quant * len(values)) - 1]
         add_quantile(quant, q)
 
-print(tabulate.tabulate(output, headers=["Name", "Wert"], tablefmt="fancy_grid"))
+output.append(
+    [
+        "Interquartilabstand",
+        np.quantile(values, 0.75, interpolation="midpoint")
+        - np.quantile(values, 0.25, interpolation="midpoint"),
+        "R",
+    ]
+)
+
+print(
+    tabulate.tabulate(
+        output, headers=["Name", "Wert", "Zeichen"], tablefmt="fancy_grid"
+    )
+)
 
 # -----------------------------------------------------------------------------
 # Plotting
