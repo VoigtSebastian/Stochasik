@@ -10,7 +10,7 @@ import tabulate
 # -----------------------------------------------------------------------------
 
 # input values
-values = [2, 4, 3, 1, 2, 4, 2, 2, 2, 3]
+values = [62, 47, 15, 37, 53, 56, 93, 59, 57, 35]
 quantile = [0.10, 0.25, 0.75]
 
 # output values
@@ -42,7 +42,10 @@ output.append(["Spannweite", np.max(values) - np.min(values), "IQR"])
 output.append(["Arithmetisches Mittel / Erwartungswert", np.mean(values), "̅̅x"])
 output.append(["Median", np.median(values), "x̃̃"])
 output.append(["Varianz", np.var(values, ddof=1), "s^2"])
-output.append(["Standardabweichung", np.std(values, ddof=1), "s"])
+# Die Standardabweichung der Stichprobe
+output.append(["Standardabweichung (gefragt)", np.std(values, ddof=1), "s"])
+# Die Standardabweichung der Population - normalerweise nicht gefragt
+output.append(["Standardabweichung Population", np.std(values, ddof=0), "s"])
 output.append(["Modalwert", modalwert(values), "x_mod"])
 
 

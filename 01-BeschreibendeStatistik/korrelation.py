@@ -8,15 +8,15 @@ import tabulate
 # Setup
 # -----------------------------------------------------------------------------
 
-a = [8, 7, 5, 10, 6, 3, 9, 7]
-b = [55, 60, 40, 70, 45, 40, 65, 55]
+a = [302, 308, 238, 203, 243, 308, 328, 297, 315, 211]
+b = [62, 47, 15, 37, 53, 56, 93, 59, 57, 35]
 
 # -----------------------------------------------------------------------------
 # Output
 # -----------------------------------------------------------------------------
 
 print("Korrelationskoeffizient")
-print(tabulate.tabulate(np.corrcoef(a, b), tablefmt="fancy_grid"))
+print(tabulate.tabulate(np.corrcoef(a, b), tablefmt="simple_grid"))
 print()
 
 
@@ -34,3 +34,14 @@ print(
         regression_output, headers=["Name", "Wert"], tablefmt="fancy_grid"
     )
 )
+
+# -----------------------------------------------------------------------------
+# Plot
+# -----------------------------------------------------------------------------
+
+#  scatterplot
+fig, ax = plt.subplots()
+plt.plot(a, b, "o")
+ax.set_xlabel("A")
+ax.set_ylabel("B")
+plt.show()
