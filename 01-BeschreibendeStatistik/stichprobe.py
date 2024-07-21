@@ -10,8 +10,8 @@ import tabulate
 # -----------------------------------------------------------------------------
 
 # input values
-values = [62, 47, 15, 37, 53, 56, 93, 59, 57, 35]
-quantile = [0.10, 0.25, 0.75]
+values = [25, 17, 25, 29, 20, 15, 11, 17, 16, 16]
+quantile = [0.10, 0.25, 0.5, 0.75, 0.9]
 
 # output values
 counts = {}
@@ -21,6 +21,13 @@ values.sort()
 
 def add_quantile(v, q):
     output.append([f"{int(v*100)}-Quantil", q, f"x̃̃_{v}"])
+
+
+def calc_quantile(quant):
+    quantil = len(values) * quant
+    if quantil.is_integer():
+        return np.quantile(values, quant, method="midpoint")
+    return values[math.ceil(quant * len(values)) - 1]
 
 
 def modalwert(list):
@@ -38,33 +45,30 @@ def modalwert(list):
 
 output.append(["Minimum", np.min(values), "min"])
 output.append(["Maximum", np.max(values), "max"])
-output.append(["Spannweite", np.max(values) - np.min(values), "IQR"])
-output.append(["Arithmetisches Mittel / Erwartungswert", np.mean(values), "̅̅x"])
+output.append(["Spannweite", np.max(values) - np.min(values), "R"])
+output.append(
+    [
+        "Arithmetisches Mittel / Erwartungswert / Mittelwert",
+        np.mean(values),
+        "̅̅x (typische Anzahl)",
+    ]
+)
 output.append(["Median", np.median(values), "x̃̃"])
 output.append(["Varianz", np.var(values, ddof=1), "s^2"])
 # Die Standardabweichung der Stichprobe
 output.append(["Standardabweichung (gefragt)", np.std(values, ddof=1), "s"])
 # Die Standardabweichung der Population - normalerweise nicht gefragt
-output.append(["Standardabweichung Population", np.std(values, ddof=0), "s"])
+output.append(["Standardabweichung Population", np.std(values, ddof=0), "σ"])
 output.append(["Modalwert", modalwert(values), "x_mod"])
 
 
 for quant in quantile:
-    quantil = len(values) * quant
-    if quantil.is_integer():
-        q = np.quantile(values, quant, method="midpoint")
-        add_quantile(quant, q)
-    else:
-        q = values[math.ceil(quant * len(values)) - 1]
-        add_quantile(quant, q)
+    quantil = calc_quantile(quant)
+    add_quantile(quant, quantil)
+
 
 output.append(
-    [
-        "Interquartilabstand",
-        np.quantile(values, 0.75, interpolation="midpoint")
-        - np.quantile(values, 0.25, interpolation="midpoint"),
-        "R",
-    ]
+    ["Interquartilabstand", calc_quantile(0.75) - calc_quantile(0.25), "I(-QR)"]
 )
 
 print(
@@ -77,5 +81,8 @@ print(
 # plotting
 # -----------------------------------------------------------------------------
 
-plt.bar(list(counts.keys()), list(counts.values()), edgecolor="black", linewidth=1.2)
-plt.show()
+if False:
+    plt.bar(
+        list(counts.keys()), list(counts.values()), edgecolor="black", linewidth=1.2
+    )
+    plt.show()
